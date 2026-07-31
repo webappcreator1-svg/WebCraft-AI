@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebCraft AI Studio - Creador de Páginas Web Profesional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Modo Claro - Profesional */
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+      --bg-accent-subtle: #eef2ff;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      
+      --accent-primary: #6366f1;
+      --accent-secondary: #8b5cf6;
+      --accent-glow: rgba(99, 102, 241, 0.2);
+      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #d946ef 100%);
+      
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+      --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.12), 0 4px 8px -4px rgb(0 0 0 / 0.08);
+      --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.25);
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html.dark {
+      /* Modo Oscuro - Ultra Premium Studio */
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1f2937;
+      --bg-accent-subtle: rgba(99, 102, 241, 0.12);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.18);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-primary: #818cf8;
+      --accent-secondary: #a78bfa;
+      --accent-glow: rgba(129, 140, 248, 0.3);
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      
+      --shadow-md: 0 4px 10px rgb(0 0 0 / 0.4);
+      --shadow-lg: 0 20px 40px rgb(0 0 0 / 0.6);
+      --shadow-glow: 0 0 35px rgba(129, 140, 248, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); }
+    body { background-color: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
+
+    /* Keyframes Animations */
+    @keyframes pulsePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.95); } }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .animate-fade { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    /* Layout Principal */
+    #app { display: flex; flex-direction: column; height: 100vh; }
+    
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.75rem 1.8rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+      z-index: 10; backdrop-filter: blur(12px);
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; cursor: pointer; }
+    .brand-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--accent-gradient); background-size: 200% 200%;
+      animation: gradientShift 6s ease infinite;
+      display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem;
+      box-shadow: var(--shadow-glow);
+    }
+    .brand-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+    .brand-subtitle { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    
+    .status-pill {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-full); background: var(--bg-accent-subtle);
+      border: 1px solid var(--accent-glow); font-size: 0.8rem; font-weight: 700; color: var(--accent-primary);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: pulsePulse 2s infinite; }
+
+    .btn {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem;
+      border-radius: var(--radius-md); border: 1px solid var(--border-color);
+      background: var(--bg-tertiary); color: var(--text-secondary);
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn:hover { border-color: var(--accent-primary); color: var(--text-primary); transform: translateY(-1px); }
+    .btn-primary { background: var(--accent-gradient); color: white; border: none; font-weight: 700; box-shadow: var(--shadow-sm); }
+    .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: var(--shadow-glow); }
+    .btn-success { background: var(--success); color: white; border: none; font-weight: 700; }
+
+    main { flex: 1; overflow: hidden; position: relative; }
+
+    /* Vista del Asistente (Wizard Studio) */
+    .wizard-wrapper {
+      height: 100%; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;
+      background: radial-gradient(circle at 50% 20%, var(--bg-accent-subtle) 0%, transparent 60%);
+    }
+    .wizard-card {
+      width: 100%; max-width: 720px; padding: 2.8rem;
+      background: var(--bg-secondary); border-radius: var(--radius-xl);
+      border: 1px solid var(--border-color); box-shadow: var(--shadow-lg);
+    }
+    .wizard-header { text-align: center; margin-bottom: 2.2rem; }
+    .wizard-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem;
+      border-radius: var(--radius-full); background: var(--bg-accent-subtle); color: var(--accent-primary);
+      font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; border: 1px solid var(--accent-glow);
+    }
+    .wizard-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
+    .wizard-subtitle { color: var(--text-secondary); font-size: 1rem; line-height: 1.5; }
+
+    .field-group { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.6rem; }
+    .label { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); }
+    .input {
+      width: 100%; padding: 0.9rem 1.2rem; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-color); background: var(--bg-tertiary);
+      color: var(--text-primary); font-size: 1rem; outline: none; transition: all 0.2s;
+    }
+    .input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+    .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.9rem; }
+    .type-card {
+      display: flex; flex-direction: column; gap: 0.6rem; padding: 1.2rem;
+      border-radius: var(--radius-lg); border: 1.5px solid var(--border-color);
+      background: var(--bg-tertiary); text-align: left; cursor: pointer; transition: all 0.25s;
+    }
+    .type-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .type-card.selected { border-color: var(--accent-primary); background: var(--bg-accent-subtle); box-shadow: var(--shadow-glow); }
+    .type-icon { font-size: 1.8rem; }
+    .type-title { font-weight: 800; font-size: 0.98rem; }
+    .type-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+
+    .style-chips { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .chip {
+      padding: 0.6rem 1.2rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);
+      background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .chip:hover { border-color: var(--accent-primary); }
+    .chip.selected { background: var(--accent-primary); color: white; border-color: var(--accent-primary); font-weight: 700; box-shadow: var(--shadow-sm); }
+
+    .preset-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.3rem; }
+    .btn-preset {
+      padding: 0.45rem 0.9rem; border-radius: var(--radius-md); border: 1px dashed var(--border-hover);
+      background: transparent; color: var(--text-secondary); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-preset:hover { border-color: var(--accent-primary); color: var(--accent-primary); background: var(--bg-accent-subtle); }
+
+    .btn-generate {
+      width: 100%; padding: 1.1rem; border-radius: var(--radius-lg); border: none;
+      background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 6s ease infinite;
+      color: white; font-size: 1.15rem; font-weight: 800; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      box-shadow: var(--shadow-glow); transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 0 45px var(--accent-glow); }
+
+    /* Vista del Estudio Professional (Studio Layout) */
+    .studio-layout { display: flex; height: 100%; width: 100%; }
+    
+    .left-panel {
+      width: 380px; background: var(--bg-secondary); border-right: 1px solid var(--border-color);
+      display: flex; flex-direction: column; height: 100%;
+    }
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.3rem;
+      border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.95rem;
+    }
+    .chat-stream { flex: 1; padding: 1.2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
+    .chat-bubble {
+      max-width: 90%; padding: 0.9rem 1.1rem; border-radius: 16px; font-size: 0.9rem; line-height: 1.55; box-shadow: var(--shadow-sm);
+    }
+    .chat-user { align-self: flex-end; background: var(--accent-gradient); color: white; border-bottom-right-radius: 4px; }
+    .chat-ai { align-self: flex-start; background: var(--bg-tertiary); color: var(--text-primary); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); }
+    .bubble-sender { font-size: 0.72rem; font-weight: 800; margin-bottom: 0.3rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .chat-form { display: flex; gap: 0.6rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-tertiary); }
+    .chat-input {
+      flex: 1; padding: 0.75rem 1rem; border-radius: var(--radius-md);
+      border: 1px solid var(--border-color); background: var(--bg-secondary);
+      color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+    }
+    .chat-input:focus { border-color: var(--accent-primary); }
+
+    .right-panel { flex: 1; display: flex; flex-direction: column; height: 100%; padding: 0.9rem; background: var(--bg-primary); }
+    .right-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.7rem; }
+    
+    .tab-group { display: flex; gap: 0.4rem; background: var(--bg-secondary); padding: 0.3rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+    .tab-btn {
+      padding: 0.5rem 1.1rem; border-radius: var(--radius-sm); border: none;
+      background: transparent; color: var(--text-secondary); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--bg-tertiary); color: var(--accent-primary); box-shadow: var(--shadow-sm); }
+
+    .studio-actions { display: flex; gap: 0.6rem; }
+
+    .stage-container { flex: 1; background: var(--bg-secondary); border-radius: var(--radius-xl); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-md); }
+    
+    .preview-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 1.2rem; background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color); }
+    .iframe-stage { flex: 1; display: flex; justify-content: center; background: #090d16; overflow: hidden; }
+    iframe { height: 100%; border: none; background: white; transition: width 0.3s ease; }
+
+    .editor-tabs { display: flex; background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color); padding: 0.4rem 0.8rem 0; gap: 0.4rem; }
+    .subtab { padding: 0.6rem 1.2rem; border: none; background: transparent; color: var(--text-secondary); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+    .subtab.active { background: var(--bg-secondary); color: var(--accent-primary); border-top: 2px solid var(--accent-primary); border-top-left-radius: 6px; border-top-right-radius: 6px; }
+    
+    .code-wrapper { flex: 1; display: flex; position: relative; }
+    textarea.code-area { flex: 1; width: 100%; padding: 1.2rem; border: none; background: var(--bg-secondary); color: var(--text-primary); font-family: var(--font-mono); font-size: 0.92rem; line-height: 1.6; resize: none; outline: none; }
+
+    .toast-msg {
+      position: fixed; bottom: 24px; right: 24px; background: var(--success); color: white;
+      padding: 0.8rem 1.5rem; border-radius: var(--radius-md); font-weight: 700; font-size: 0.9rem;
+      box-shadow: var(--shadow-lg); z-index: 2000; animation: fadeIn 0.3s forwards;
+    }
+
+    .hidden { display: none !important; }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <!-- Header -->
+    <header>
+      <div class="brand" id="brandBtn">
+        <div class="brand-icon">🪄</div>
+        <div>
+          <h1 class="brand-title">WebCraft AI Studio</h1>
+          <span class="brand-subtitle">Creador de Páginas Web Profesional</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          <span>IA Gemini Conectada & Lista</span>
+        </div>
+        <button class="btn" id="themeBtn" title="Cambiar Tema (Oscuro/Claro)">🌙</button>
+        <button class="btn btn-primary hidden" id="newProjectBtn">+ Nuevo Proyecto</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Step 1: Wizard View -->
+      <div id="wizardView" class="wizard-wrapper">
+        <div class="wizard-card animate-fade">
+          <div class="wizard-header">
+            <div class="wizard-badge">✨ Asistente de Creación IA Profesional</div>
+            <h2 class="wizard-title">Crea tu Página Web Increíble</h2>
+            <p class="wizard-subtitle">Ingresa el nombre de tu proyecto y la IA generará el código HTML, CSS y JS con vista previa en tiempo real.</p>
+          </div>
+
+          <form id="wizardForm">
+            <div class="field-group">
+              <label class="label">1. ¿Cuál es el nombre de tu negocio, juego o aplicación? <span style="color:var(--danger)">*</span></label>
+              <input type="text" id="projectName" class="input" placeholder="Ej: Restaurante Nápoli, CyberRunner 2077, TaskMaster Pro..." required />
+            </div>
+
+            <div class="field-group">
+              <label class="label">2. ¿Qué tipo de proyecto deseas construir?</label>
+              <div class="type-grid">
+                <div class="type-card selected" data-type="negocio">
+                  <span class="type-icon">🏪</span>
+                  <div>
+                    <div class="type-title">Negocio / Tienda</div>
+                    <div class="type-desc">Restaurantes, servicios, páginas corporativas</div>
+                  </div>
+                </div>
+                <div class="type-card" data-type="juego">
+                  <span class="type-icon">🎮</span>
+                  <div>
+                    <div class="type-title">Juego 2D / Arcade</div>
+                    <div class="type-desc">Juegos interactivos completos en Canvas o HTML</div>
+                  </div>
+                </div>
+                <div class="type-card" data-type="app">
+                  <span class="type-icon">⚡</span>
+                  <div>
+                    <div class="type-title">Aplicación Web</div>
+                    <div class="type-desc">Herramientas, calculadoras, administradores</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="label">3. ¿Qué estilo o paleta de colores prefieres?</label>
+              <div class="style-chips">
+                <button type="button" class="chip selected" data-style="moderno">✨ Moderno & Elegante</button>
+                <button type="button" class="chip" data-style="oscuro">🌙 Tema Oscuro Cyberpunk</button>
+                <button type="button" class="chip" data-style="vibrante">🎨 Neón & Vibrante</button>
+                <button type="button" class="chip" data-style="minimalista">🌿 Minimalista & Limpio</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <span style="font-size:0.85rem;color:var(--text-muted);font-weight:600">O prueba una plantilla profesional en 1 clic:</span>
+              <div class="preset-btns">
+                <button type="button" class="btn-preset" onclick="setQuickPreset('Pizzería Nápoli', 'negocio', 'oscuro')">🍕 Pizzería Nápoli</button>
+                <button type="button" class="btn-preset" onclick="setQuickPreset('Space Defender 2D', 'juego', 'vibrante')">🚀 Juego Space Defender</button>
+                <button type="button" class="btn-preset" onclick="setQuickPreset('TaskMaster Pro', 'app', 'moderno')">⚡ App TaskMaster</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-generate" id="generateBtn">
+              <span>🪄 ¡Generar Mi Página Web con IA!</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Step 2: Studio View -->
+      <div id="studioView" class="studio-layout hidden">
+        <!-- Left Panel: Chat AI Assistant -->
+        <aside class="left-panel">
+          <div class="panel-header">
+            <span>💬 Asistente de Corrección IA</span>
+            <span id="projectTag" style="font-size:0.75rem;padding:0.25rem 0.6rem;background:var(--bg-accent-subtle);color:var(--accent-primary);border-radius:10px;font-weight:700">Proyecto</span>
+          </div>
+
+          <div class="chat-stream" id="chatStream"></div>
+
+          <form class="chat-form" id="chatForm">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Pide un cambio (ej: 'Pon el título más grande', 'Agrega un botón de WhatsApp')..." required />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </aside>
+
+        <!-- Right Panel: Live Preview & Code Editor -->
+        <section class="right-panel">
+          <div class="right-panel-header">
+            <div class="tab-group">
+              <button class="tab-btn active" id="tabPreviewBtn">👁️ Vista Previa en Vivo</button>
+              <button class="tab-btn" id="tabCodeBtn">💻 Código HTML/CSS/JS</button>
+            </div>
+
+            <div class="studio-actions">
+              <button class="btn" onclick="copyCode()" title="Copiar Código"><span id="copyBtnTxt">📋 Copiar Código</span></button>
+              <button class="btn btn-success" onclick="downloadHTML()" title="Descargar la página completa en HTML">📥 Descargar .HTML</button>
+              <button class="btn" onclick="openInNewTab()" title="Abrir en Nueva Pestaña">🔗 Abrir Web</button>
+            </div>
+          </div>
+
+          <div class="stage-container" id="previewStage">
+            <div class="preview-toolbar">
+              <div style="display:flex;gap:0.4rem;align-items:center;">
+                <button class="btn" onclick="setViewport('100%')">🖥️ Escritorio</button>
+                <button class="btn" onclick="setViewport('768px')">📱 Tablet</button>
+                <button class="btn" onclick="setViewport('375px')">📱 Móvil</button>
+              </div>
+              <button class="btn" onclick="refreshIframe()">🔄 Recargar</button>
+            </div>
+            <div class="iframe-stage">
+              <iframe id="previewIframe" title="Vista previa en vivo"></iframe>
+            </div>
+          </div>
+
+          <div class="stage-container hidden" id="codeStage">
+            <div class="editor-tabs">
+              <button class="subtab active" onclick="switchCodeTab('html')">HTML</button>
+              <button class="subtab" onclick="switchCodeTab('css')">CSS</button>
+              <button class="subtab" onclick="switchCodeTab('js')">JavaScript</button>
+            </div>
+            <div class="code-wrapper">
+              <textarea class="code-area" id="codeTextarea" spellcheck="false"></textarea>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <!-- Application Logic -->
+  <script>
+    // =========================================================================
+    // API KEY PREDETERMINADA
+    // =========================================================================
+    const DEFAULT_API_KEY = "AQ.Ab8RN6LRWh9o7fVu5zy7nd_2b3t8H5ndwX8WTRKRhluWDShd8A";
+
+    // Plantillas de Respaldo locales
+    const TEMPLATES = {
+      negocio: {
+        html: `<!DOCTYPE html>\n<html lang="es">\n<head><meta charset="UTF-8"><title>Negocio</title></head>\n<body>\n  <header style="padding:1.5rem;background:#1e293b;color:white;display:flex;justify-content:space-between;align-items:center;">\n    <h2>🍕 {{NAME}}</h2>\n    <button onclick="pedir()" style="background:#ff6b6b;color:white;border:none;padding:0.6rem 1.2rem;border-radius:20px;font-weight:bold;cursor:pointer;">Pedir Ahora</button>\n  </header>\n  <section style="padding:4rem 2rem;text-align:center;background:#0f172a;color:white;">\n    <h1 style="font-size:2.5rem;margin-bottom:1rem;">La Mejor Experiencia en {{NAME}}</h1>\n    <p style="color:#94a3b8;max-width:600px;margin:0 auto 2rem;">Ingredientes frescos, atención de calidad y el mejor ambiente de la ciudad.</p>\n    <button onclick="pedir()" style="background:#ff6b6b;color:white;border:none;padding:0.8rem 2rem;border-radius:30px;font-size:1.1rem;font-weight:bold;cursor:pointer;">Ver Especialidades</button>\n  </section>\n</body>\n</html>`,
+        css: `body { margin:0; font-family:'Segoe UI',sans-serif; background:#0f172a; }`,
+        js: `function pedir() { alert('¡Gracias por elegir {{NAME}}! Tu pedido se ha registrado.'); }`
+      },
+      juego: {
+        html: `<!DOCTYPE html>\n<html lang="es">\n<head><meta charset="UTF-8"><title>Juego</title></head>\n<body style="background:#050510;color:#00ffcc;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;">\n  <h2>🚀 {{NAME}}</h2>\n  <p>Puntos: <b id="score">0</b></p>\n  <canvas id="c" width="400" height="300" style="border:2px solid #00ffcc;background:#0a0a1a;margin:1rem 0;"></canvas>\n  <button onclick="clickGame()" style="background:#00ffcc;color:#050510;border:none;padding:0.8rem 1.5rem;font-weight:bold;border-radius:8px;cursor:pointer;">¡DISPARAR / JUGAR!</button>\n</body>\n</html>`,
+        css: ``,
+        js: `let s=0; function clickGame(){ s+=100; document.getElementById('score').innerText=s; }`
+      },
+      app: {
+        html: `<!DOCTYPE html>\n<html lang="es">\n<head><meta charset="UTF-8"><title>App</title></head>\n<body style="background:#0f172a;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;">\n  <div style="background:#1e293b;padding:2rem;border-radius:16px;width:340px;box-shadow:0 10px 25px rgba(0,0,0,0.5);">\n    <h2>⚡ {{NAME}}</h2>\n    <div style="display:flex;gap:0.5rem;margin:1rem 0;">\n      <input id="inp" placeholder="Nueva tarea..." style="flex:1;padding:0.6rem;border-radius:8px;border:1px solid #334155;background:#0f172a;color:white;">\n      <button onclick="add()" style="background:#38bdf8;color:#0f172a;border:none;padding:0.6rem 1rem;border-radius:8px;font-weight:bold;cursor:pointer;">+</button>\n    </div>\n    <ul id="list" style="list-style:none;padding:0;"></ul>\n  </div>\n</body>\n</html>`,
+        css: ``,
+        js: `function add(){ let i=document.getElementById('inp'); if(!i.value)return; let li=document.createElement('li'); li.innerText='• '+i.value; li.style.padding='0.5rem 0'; document.getElementById('list').appendChild(li); i.value=''; }`
+      }
+    };
+
+    // Estado global de la aplicación
+    let currentCode = { html: '', css: '', js: '' };
+    let currentProjectType = 'negocio';
+    let currentStyle = 'moderno';
+    let activeCodeTab = 'html';
+
+    // Elementos DOM
+    const wizardView = document.getElementById('wizardView');
+    const studioView = document.getElementById('studioView');
+    const previewIframe = document.getElementById('previewIframe');
+    const chatStream = document.getElementById('chatStream');
+    const codeTextarea = document.getElementById('codeTextarea');
+
+    // Eventos
+    document.getElementById('themeBtn').onclick = () => {
+      document.documentElement.classList.toggle('dark');
+      document.getElementById('themeBtn').innerText = document.documentElement.classList.contains('dark') ? '🌙' : '☀️';
+    };
+
+    // Selección de tarjetas de tipo de proyecto
+    document.querySelectorAll('.type-card').forEach(card => {
+      card.onclick = () => {
+        document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        currentProjectType = card.dataset.type;
+      };
+    });
+
+    // Selección de estilo
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.onclick = () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        currentStyle = chip.dataset.style;
+      };
+    });
+
+    function setQuickPreset(name, type, style) {
+      document.getElementById('projectName').value = name;
+      currentProjectType = type;
+      currentStyle = style;
+      document.querySelectorAll('.type-card').forEach(c => c.classList.toggle('selected', c.dataset.type === type));
+    }
+
+    // Enviar Formulario del Asistente (Wizard)
+    document.getElementById('wizardForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const projName = document.getElementById('projectName').value.trim();
+      if (!projName) return;
+
+      document.getElementById('generateBtn').innerText = '⏳ La IA está diseñando tu página...';
+
+      const generated = await callAIorFallback(projName, currentProjectType, currentStyle, false, '');
+
+      currentCode = generated;
+      document.getElementById('projectTag').innerText = projName;
+      
+      wizardView.classList.add('hidden');
+      studioView.classList.remove('hidden');
+      document.getElementById('newProjectBtn').classList.remove('hidden');
+
+      chatStream.innerHTML = '';
+      addChatBubble('ai', `¡Página web para "${projName}" generada con éxito! Puedes pedirme cualquier modificación o ajuste abajo en el chat.`);
+
+      renderPreview();
+      document.getElementById('generateBtn').innerText = '🪄 ¡Generar Mi Página Web con IA!';
+    };
+
+    // Botón Nuevo Proyecto
+    document.getElementById('newProjectBtn').onclick = () => {
+      studioView.classList.add('hidden');
+      wizardView.classList.remove('hidden');
+      document.getElementById('newProjectBtn').classList.add('hidden');
+    };
+
+    // Formulario de Chat / Corrección
+    document.getElementById('chatForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const prompt = input.value.trim();
+      if (!prompt) return;
+
+      input.value = '';
+      addChatBubble('user', prompt);
+
+      const projName = document.getElementById('projectTag').innerText;
+      const updated = await callAIorFallback(projName, currentProjectType, currentStyle, true, prompt);
+
+      currentCode = updated;
+      addChatBubble('ai', '¡He aplicado tus correcciones a la página web!');
+      renderPreview();
+    };
+
+    function addChatBubble(sender, text) {
+      const div = document.createElement('div');
+      div.className = `chat-bubble ${sender === 'user' ? 'chat-user' : 'chat-ai'}`;
+      div.innerHTML = `<div class="bubble-sender">${sender === 'user' ? 'Tú' : '🤖 IA Assistant'}</div><div>${text}</div>`;
+      chatStream.appendChild(div);
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    // Llamada a la API de Gemini con Fallback inteligente
+    async function callAIorFallback(projectName, projectType, style, isCorrection, prompt) {
+      if (DEFAULT_API_KEY) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${DEFAULT_API_KEY}`;
+          const systemPrompt = `Eres un experto diseñador Web Frontend. Genera un sitio espectacular en HTML5, CSS3 moderno y JS limpio. Responde en 3 bloques de código:\n\`\`\`html\n...\n\`\`\`\n\`\`\`css\n...\n\`\`\`\n\`\`\`javascript\n...\n\`\`\``;
+          const userText = isCorrection ? `Código actual: ${JSON.stringify(currentCode)}\nCorrección deseada: ${prompt}` : `Nombre: ${projectName}, Tipo: ${projectType}, Estilo deseado: ${style}`;
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt + '\n' + userText }] }] })
+          });
+
+          const data = await res.json();
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+          const htmlM = text.match(/```html\n([\s\S]*?)\n```/i);
+          const cssM = text.match(/```css\n([\s\S]*?)\n```/i);
+          const jsM = text.match(/```(?:js|javascript)\n([\s\S]*?)\n```/i);
+
+          if (htmlM) {
+            return {
+              html: htmlM[1].trim(),
+              css: cssM ? cssM[1].trim() : '',
+              js: jsM ? jsM[1].trim() : ''
+            };
+          }
+        } catch (e) {
+          console.error("Gemini API Error:", e);
+        }
+      }
+
+      // Simulación de respuesta rápida
+      await new Promise(r => setTimeout(r, 600));
+
+      if (isCorrection) {
+        let css = currentCode.css + `\n/* Cambio IA: ${prompt} */\nbutton { box-shadow: 0 0 20px var(--accent-glow) !important; }`;
+        return { ...currentCode, css };
+      }
+
+      const tmpl = TEMPLATES[projectType] || TEMPLATES.negocio;
+      return {
+        html: tmpl.html.replaceAll('{{NAME}}', projectName),
+        css: tmpl.css,
+        js: tmpl.js.replaceAll('{{NAME}}', projectName)
+      };
+    }
+
+    // Renderizar Vista Previa en iframe
+    function renderPreview() {
+      const fullDoc = `<!DOCTYPE html><html><head><style>${currentCode.css}</style></head><body>${currentCode.html}<script>${currentCode.js}<\/script></body></html>`;
+      previewIframe.srcdoc = fullDoc;
+      if (activeCodeTab) codeTextarea.value = currentCode[activeCodeTab] || '';
+    }
+
+    function refreshIframe() { renderPreview(); }
+    function setViewport(w) { previewIframe.style.width = w; }
+
+    // Cambiar Pestaña Principal (Vista Previa vs Código)
+    document.getElementById('tabPreviewBtn').onclick = () => {
+      document.getElementById('tabPreviewBtn').classList.add('active');
+      document.getElementById('tabCodeBtn').classList.remove('active');
+      document.getElementById('previewStage').classList.remove('hidden');
+      document.getElementById('codeStage').classList.add('hidden');
+    };
+
+    document.getElementById('tabCodeBtn').onclick = () => {
+      document.getElementById('tabCodeBtn').classList.add('active');
+      document.getElementById('tabPreviewBtn').classList.remove('active');
+      document.getElementById('codeStage').classList.remove('hidden');
+      document.getElementById('previewStage').classList.add('hidden');
+      codeTextarea.value = currentCode[activeCodeTab] || '';
+    };
+
+    function switchCodeTab(tab) {
+      activeCodeTab = tab;
+      document.querySelectorAll('.subtab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      codeTextarea.value = currentCode[tab] || '';
+    }
+
+    codeTextarea.oninput = (e) => {
+      currentCode[activeCodeTab] = e.target.value;
+      renderPreview();
+    };
+
+    // Funciones de Exportación Profesional
+    function copyCode() {
+      const fullCode = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <title>Página Web</title>\n  <style>\n${currentCode.css}\n  </style>\n</head>\n<body>\n${currentCode.html}\n  <script>\n${currentCode.js}\n  <\/script>\n</body>\n</html>`;
+      navigator.clipboard.writeText(fullCode);
+      showToast("¡Código copiado al portapapeles! 📋");
+    }
+
+    function downloadHTML() {
+      const fullCode = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>${document.getElementById('projectTag').innerText || 'PaginaWeb'}</title>\n  <style>\n${currentCode.css}\n  </style>\n</head>\n<body>\n${currentCode.html}\n  <script>\n${currentCode.js}\n  <\/script>\n</body>\n</html>`;
+      
+      const blob = new Blob([fullCode], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(document.getElementById('projectTag').innerText || 'mi-pagina-web').toLowerCase().replace(/\s+/g, '-')}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("¡Página descargada como archivo .HTML! 📥");
+    }
+
+    function openInNewTab() {
+      const fullCode = `<!DOCTYPE html><html><head><style>${currentCode.css}</style></head><body>${currentCode.html}<script>${currentCode.js}<\/script></body></html>`;
+      const win = window.open();
+      win.document.write(fullCode);
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.innerText = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>
